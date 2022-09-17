@@ -12,6 +12,17 @@
 """
 
 
+
+
+
+
+def get_list_by_index(file_pth='./data/159938_yiyao.csv', index='买入价'):
+    
+
+    return
+
+
+
 def get_everage_cost():
     """
     # 计算平均的持仓成本
@@ -23,7 +34,8 @@ def get_buy_info():
     """
     获取买入相关的信息
     """
-
+    
+    return
 
 
 
