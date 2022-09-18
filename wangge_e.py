@@ -221,8 +221,8 @@ if __name__ == '__main__':
     raw_data_dir = './data/'
     my_stratdgey_dir = './dst_stratgey/'
     shangche_dir = './banlu_shangche/'
-    # get_my_stratdgey(data_dir=raw_data_dir, dst_dir=my_stratdgey_dir)
-    batch_banlu_shangche(data_dir=my_stratdgey_dir, dst_dir=shangche_dir)
+    #get_my_stratdgey(data_dir=raw_data_dir, dst_dir=my_stratdgey_dir)
+    #batch_banlu_shangche(data_dir=my_stratdgey_dir, dst_dir=shangche_dir)
     
     
     print('')
