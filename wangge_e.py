@@ -165,7 +165,8 @@ def banlu_shangche(data_pth='./dst_stratgey/159938_yiyao.csv', cur_price=0.724, 
     
     print('#'*20, os.path.basename(data_pth), '#'*20)
     res_str = '卖出触发价,卖出价,出股数,卖出金额\n'
-    print('当前价格{},共买入{}份，总价{}元;设置卖出：'.format(cur_price, shangche_amount, total_money))
+    res_info_str = '{}, 当前价格{:.3f}, 共买入{:.0f}份, 总价{:.1f}元;'.format(os.path.basename(data_pth), cur_price, shangche_amount, total_money)
+    print(res_info_str, '设置卖出：')
     for i in range(shangche_head_ind+1):
         
         print('\t卖出触发价{:*>6.3f},卖出价{:*>6.3f},出股数{:*>8.1f},卖出金额{:*>8.1f}'.format(raw_df['卖出触发价'][i], 
@@ -176,6 +177,8 @@ def banlu_shangche(data_pth='./dst_stratgey/159938_yiyao.csv', cur_price=0.724, 
     
     with open(os.path.join(dst_dir, os.path.basename(data_pth)), 'w', encoding='utf-8') as f2_obj:
         f2_obj.write(res_str)
+        
+    return res_info_str, total_money
     
             
   
@@ -196,22 +199,30 @@ def batch_banlu_shangche(data_dir='./dst_stratgey/', dst_dir='./banlu_shangche/'
     
     assert len(data_li) == len(cur_price_li)
     
+    res_info_str = ''
+    total_money = 0
     for idx, data_file in enumerate(data_li):
         data_pth = os.path.join(data_dir, data_file)
-        banlu_shangche(data_pth=data_pth, cur_price=cur_price_li[idx], dst_dir=dst_dir)
+        cur_info, cur_money = banlu_shangche(data_pth=data_pth, cur_price=cur_price_li[idx], dst_dir=dst_dir)
+        res_info_str += cur_info + '\n'
+        total_money += cur_money
+    res_info_str = "总共{}个网格产品, 共买入{:.1f}元, 买入详情:\n".format(len(data_li), total_money) + res_info_str
+    
+    with open(os.path.join(dst_dir, 'buy_info.txt'), 'w', encoding='utf-8') as f2_obj:
+        f2_obj.write(res_info_str)
 
 
 
 if __name__ == '__main__':
     # 使用方法：
     # 1.先用get_my_stratdgey 获取自己的策略，记得按照自己的资金，更改scale_ratio_li 内容
-    # 2.再调用batch_banlu_shangche，确定半路上车买入的情况，以及设置的卖出结果
+    # 2.再调用batch_banlu_shangche，确定半路上车买入的情况，以及设置的卖出结果;记得按照交易日当天的结果，更新cur_price_li
     
     raw_data_dir = './data/'
     my_stratdgey_dir = './dst_stratgey/'
     shangche_dir = './banlu_shangche/'
     # get_my_stratdgey(data_dir=raw_data_dir, dst_dir=my_stratdgey_dir)
-    # batch_banlu_shangche(data_dir=my_stratdgey_dir, dst_dir=shangche_dir)
+    batch_banlu_shangche(data_dir=my_stratdgey_dir, dst_dir=shangche_dir)
     
     
     print('')
